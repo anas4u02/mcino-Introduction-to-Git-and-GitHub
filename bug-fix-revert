@@ -1,17 +1,11 @@
-curl -s https://api.github.com/repos/anas4u02/mcino-Introduction-to-Git-and-GitHub/pulls/1 \        
-  | jq '{
+curl -s "https://api.github.com/repos/anas4u02/github-final-project/pulls?state=all" \
+  | jq '.[] | {
+      pr_number: .number,
       title: .title,
       state: .state,
-      from_repo: .head.repo.full_name,
+      is_valid_pr: (if .state == "open" or .state == "closed" then true else false end),
+      target_repo: .base.repo.full_name,
+      forked_from_repo: .head.repo.full_name,
       from_branch: .head.ref,
-      into_branch: .base.ref,
-      is_cross_fork: (.head.repo.full_name != .base.repo.full_name)
+      into_branch: .base.ref
     }'
-{
-  "title": "minor fix",
-  "state": "closed",
-  "from_repo": "anas4u02/mcino-Introduction-to-Git-and-GitHub",
-  "from_branch": "bug-fix-typo",
-  "into_branch": "main",
-  "is_cross_fork": false
-}
